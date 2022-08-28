@@ -36,7 +36,6 @@ def settings_window():
     window.close()
 
 data = []
-
 def url_window():
     sg.theme('Python')
     map_view()
