@@ -4,6 +4,7 @@ import json
 import requests
 import webbrowser
 import time
+import subprocess
 
 sg.theme('Python')   # Add a touch of color
 # All the stuff inside your window.
@@ -38,15 +39,17 @@ def settings_window():
 data = []
 def url_window():
     sg.theme('Python')
-    map_view()
     layout = [
         [sg.Text("Map URL (convert.json)")],
-        [sg.Listbox(data,size=(70,40))]
+        [sg.Listbox(data,size=(70,40))],
+        [sg.Button('Path')]
     ]
     window = sg.Window('map', layout)
 
     while True:
         event, values = window.read()
+        if event == 'Path':
+            folder()
         if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
             break
     window.close()
@@ -58,8 +61,10 @@ def map_dump():
     while i < len(temp):
         details.append(temp[i].split(" ")[0])
         i += 1
+        print(f"Карта {i}")
     with open('data.json', 'w') as json_file:
         json.dump(details, json_file)
+    map_view()
 
 
 def map_view():
@@ -73,6 +78,9 @@ def map_view():
             json.dump(data, json_file)
         i += 1
 
+def folder():
+    path = os.path.abspath(os.curdir)
+    subprocess.Popen(f'explorer /select , {path}\convert.json')
 
 while True:
     event, values = window.read()
@@ -85,6 +93,5 @@ while True:
         url_window()
     if event == "Settings":
         settings_window()
-
 
 window.close()
